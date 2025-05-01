@@ -1,0 +1,64 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish as Node.js Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the repository’s code at the default branch
+      # This makes your code available for subsequent steps like installing dependencies and running tests.
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up a Node.js environment (Node 20.x) and configure npm to use the official registry
+      # This ensures we have the right Node.js version and a proper registry URL for installs and publishing.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Step 3: Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # Step 4: Install dependencies using npm ci
+      # This ensures a clean, reproducible installation based on package-lock.json.
+      - name: "Install dependencies"
+        run: pnpm install
+
+      # Step 5: Run your test suite (using the "test" script from package.json)
+      # If tests fail, the workflow will stop here and not publish a broken version.
+      - name: "Run tests"
+        run: pnpm test
+        env:
+          NOTCHPAY_TESTING_SUCCESS_PHONE: ${{ secrets.NOTCHPAY_TESTING_SUCCESS_PHONE }}
+          NOTCHPAY_PUBLIC_KEY: ${{ secrets.NOTCHPAY_PUBLIC_KEY }}
+          NOTCHPAY_PRIVATE_KEY: ${{ secrets.NOTCHPAY_PRIVATE_KEY }}
+          NOTCHPAY_HASH_KEY: ${{ secrets.NOTCHPAY_HASH_KEY }}
+          NOTCHPAY_DEBUG: ${{ secrets.NOTCHPAY_DEBUG }}
+          NOTCHPAY_TESTING_FAILED_PHONE: ${{ secrets.NOTCHPAY_TESTING_FAILED_PHONE }}
+
+  publish:
+    needs:
+      - tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+      - run: npm install -g pnpm
+      - run: pnpm install --prod
+      - run: pnpm run build
+      - run: pnpm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
