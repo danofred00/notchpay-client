@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "ES2020"],
+    "baseUrl": ".",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["tests/*"]
+    },
+    "resolveJsonModule": true
+  },
+  "include": ["src", "env.d.ts"],
+  "exclude": ["node_modules", "tests"]
+}

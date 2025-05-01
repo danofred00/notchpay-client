@@ -1,0 +1,6 @@
+node_modules/
+dist/
+
+TODO.txt
+env.d.ts
+.env
