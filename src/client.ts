@@ -108,14 +108,14 @@ export class NotchpayClient {
   private setupInterceptors(): void {
     // requests interceptors
     this.client.interceptors.request.use(
-      (config) => {
-        return config;
-      }
+      (config) => config,
+      (error) => this.handleError(error, this.debug)
     );
 
     // responses interceptors
     this.client.interceptors.response.use(
       (response) => response,
+      (error) => this.handleError(error, this.debug)
     );
   }
 
@@ -123,25 +123,31 @@ export class NotchpayClient {
    * Format and handle API errors
    * @param error Error object from API call
    */
-  private handleError(error: Error | AxiosError, debug: boolean): void {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      if (axiosError.response) {
-        console.error("NotchPay API Error:", {
-          status: axiosError.response.status,
-          statusText: axiosError.response.statusText,
-          data: axiosError.response.data,
-        });
-      } else if (axiosError.request) {
-        console.error(
-          "NotchPay Request Error (No Response):",
-          axiosError.request
-        );
+  private handleError(
+    error: Error | AxiosError,
+    debug: boolean
+  ): Promise<Error> {
+    if (debug) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+          console.error("NotchPay API Error:", {
+            status: axiosError.response.status,
+            statusText: axiosError.response.statusText,
+            data: axiosError.response.data,
+          });
+        } else if (axiosError.request) {
+          console.error(
+            "NotchPay Request Error (No Response):",
+            axiosError.request
+          );
+        } else {
+          console.error("NotchPay Error:", axiosError.message);
+        }
       } else {
-        console.error("NotchPay Error:", axiosError.message);
+        console.error("Unexpected Error:", error.message);
       }
-    } else {
-      console.error("Unexpected Error:", error.message);
     }
+    return Promise.reject(error);
   }
 }
