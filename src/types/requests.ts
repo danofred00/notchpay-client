@@ -51,7 +51,7 @@ export interface NotchPayInitializePaymentRequest extends NotchPayBaseRequest {
    * Amount to charge
    * Note: For currencies like XAF, this value must not contain decimal places
    */
-  amount: string | number ;
+  amount: string | number;
 
   /**
    * URL to redirect the customer after payment
@@ -130,8 +130,66 @@ export interface NotchPayCreateRecipientRequest extends NotchPayCustomer {
    * Channel used to recieve money
    */
   channel: NotchPayChannel;
+
+  /**
+   * Country code of the recipient
+   * Example: 'CM' for Cameroon
+   */
   country: string;
-  number: string;
+
+  /**
+   * Account number of the recipient
+   * Example: '+237656019261' for Cameroon
+   * Note: This should be a valid phone number for the selected channel
+   */
+  account_number: string;
+
+  /**
+   * Optional description of the recipient
+   */
   description?: string;
+
+  /**
+   * Optional reference for the recipient
+   * This can be used to identify the recipient in your system
+   */
   reference?: string;
+
+  /**
+   * Optional phone for the recipient
+   * This can be used to store additional information about the recipient
+   */
+  phone?: string;
+}
+
+export interface NotchPayInitializeTransferRequest {
+  /**
+   * This is the recipient ID
+   */
+  recipient: string;
+
+  /**
+   * The amount to transfer
+   */
+  amount: number | string;
+
+  /**
+   * The currency used to transfer
+   */
+  currency: string;
+
+  /**
+   * Optional statement of the transfer
+   */
+  statement?: string;
+
+  /**
+   * Optional description
+   */
+  description?: string;
+
+  /**
+   * Channel used to transfer money
+   */
+  channel: NotchPayChannel;
 }

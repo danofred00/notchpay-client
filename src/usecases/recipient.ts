@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios";
 import {
   NotchPayCollectionResponse,
   NotchPayCreateRecipientRequest,
+  NotchPayCreateRecipientResponse,
 } from "../types";
 import { Usecase } from "./base";
 
@@ -15,7 +16,8 @@ export class RecipientUsecases extends Usecase {
    */
   public async getAll() {
     const response = await this.client.get<NotchPayCollectionResponse>(
-      "/recipients"
+      "/recipients",
+      { headers: { "X-Grant": this.privateKey } }
     );
     return response.data;
   }
@@ -25,7 +27,19 @@ export class RecipientUsecases extends Usecase {
    * @returns Promise with the created recipient's data
    */
   public async create(recipientData: NotchPayCreateRecipientRequest) {
-    const response = await this.client.post("/recipients", recipientData, {
+    const response = await this.client.post<NotchPayCreateRecipientResponse>("/recipients", recipientData, {
+      headers: { "X-Grant": this.privateKey },
+    });
+    return response.data;
+  }
+
+  /**
+   * Retrieve a particular recipient
+   * @param id recipient ID
+   * @returns
+   */
+  public async get(id: string) {
+    const response = await this.client.get(`/recipients/${id}`, {
       headers: { "X-Grant": this.privateKey },
     });
     return response.data;
