@@ -1,6 +1,6 @@
 {
   "name": "notchpay-client",
-  "version": "0.1.0-beta",
+  "version": "0.2.0-beta",
   "description": "The notchpay javascript client for your saas",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
