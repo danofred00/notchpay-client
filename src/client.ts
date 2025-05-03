@@ -59,7 +59,7 @@ export class NotchpayClient {
     this._accounts = new AccountUsecases(this.client);
     this._customers = new CustomerUsecases(this.client);
     this._refunds = new RefundUsecases(this.client);
-    this._transfers = new TransferUsecases(this.client);
+    this._transfers = new TransferUsecases(this.client, this.privateKey);
   }
 
   /**

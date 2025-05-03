@@ -1,3 +1,5 @@
+import { NotchPayChannel } from "./requests";
+
 /**
  * Base response properties shared across all NotchPay responses
  */
@@ -23,7 +25,8 @@ export interface NotchPayBaseResponse {
   errors?: Record<string, any>;
 }
 
-export interface NotchPayCollectionResponse<T = any> extends NotchPayBaseResponse {
+export interface NotchPayCollectionResponse<T = any>
+  extends NotchPayBaseResponse {
   /**
    * List of items
    */
@@ -174,3 +177,142 @@ export interface NotchpayGetTransactionResponse extends NotchPayBaseResponse {
  * NotchPay Direct Charge Response
  */
 export interface NotchPayDirectChargeResponse extends NotchPayBaseResponse {}
+
+export interface NotchPayPaymentMethod {
+  /**
+   * Payment Method ID
+   */
+  id: string;
+
+  /**
+   * Payment method channel
+   */
+  channel: NotchPayChannel;
+
+  /**
+   * Optional Email, used for paypal
+   * @deprecated
+   */
+  email: string | null;
+
+  /**
+   * Country code
+   */
+  country: string;
+
+  /**
+   * Optional Name, used for Credit Card
+   * @deprecated
+   */
+  name: string;
+
+  /**
+   * Payment method string type: Ex: Mobile Money
+   */
+  type: string;
+
+  /**
+   * Number registered with the payment method
+   */
+  account_number: string;
+
+  // additional datas
+  number?: string | null;
+  phone?: string | null;
+  issuer: string | null;
+  issuer_code: string | null;
+
+  /**
+   * Creation date
+   */
+  created_at: Date;
+}
+
+export interface NotchPayRecipient {
+  /**
+   * Recipient ID
+   */
+  id: string;
+
+  /**
+   * Recipient phone number, define in creation
+   */
+  phone: string | null;
+
+  /**
+   * Recipient Name
+   */
+  name: string;
+
+  /**
+   * Recipient Email
+   */
+  email: string;
+
+  /**
+   * Recipient created in Sandbox mode ?
+   */
+  sandbox: boolean;
+
+  /**
+   * Recipient Country code
+   */
+  country: string;
+
+  /**
+   * Payment Method used by the recipient
+   */
+  payment_method: NotchPayPaymentMethod;
+}
+
+export interface NotchPayCreateRecipientResponse extends NotchPayBaseResponse {
+  /**
+   * Recipient details
+   */
+  beneficiary: NotchPayRecipient;
+}
+
+/**
+ * Transfer status
+ */
+export type NotchPayTransferStatus =
+  | "pending"
+  | "sent"
+  | "failed"
+  | "rejected"
+  | "expired"
+  | "complete";
+
+/**
+ * Notchpay transfer item
+ */
+export interface NotchPayTransfer
+  extends Omit<NotchPayTransaction, "customer" | "status"> {
+  /**
+   * Recipient ID
+   */
+  beneficary: string;
+
+  /**
+   * Status of the transfer
+   */
+  status: NotchPayTransferStatus;
+
+  /**
+   * The transaction reference
+   */
+  trxref: string | null;
+
+  /**
+   * The external statement
+   */
+  statement: string | null;
+}
+
+/**
+ * Notchpay initialize transfer response
+ */
+export interface NotchPayInitializeTransferResponse
+  extends NotchPayBaseResponse {
+  transfer: NotchPayTransfer;
+}
