@@ -193,3 +193,81 @@ export interface NotchPayInitializeTransferRequest {
    */
   channel: NotchPayChannel;
 }
+
+/**
+ * NotchPay webhook event types
+ */
+export enum NotchPayWebhookEventType {
+  // Payment Events
+  PAYMENT_CREATED = "payment.created",
+  PAYMENT_PROCESSING = "payment.processing", 
+  PAYMENT_COMPLETE = "payment.complete",
+  PAYMENT_FAILED = "payment.failed",
+  PAYMENT_CANCELED = "payment.canceled",
+  PAYMENT_EXPIRED = "payment.expired",
+
+  // Transfer Events
+  TRANSFER_CREATED = "transfer.created",
+  TRANSFER_PROCESSING = "transfer.processing",
+  TRANSFER_COMPLETE = "transfer.complete", 
+  TRANSFER_FAILED = "transfer.failed",
+
+  // Customer Events
+  CUSTOMER_CREATED = "customer.created",
+  CUSTOMER_UPDATED = "customer.updated",
+
+  // Beneficiary Events
+  BENEFICIARY_CREATED = "beneficiary.created",
+  BENEFICIARY_UPDATED = "beneficiary.updated",
+  BENEFICIARY_DELETED = "beneficiary.deleted",
+}
+
+/**
+ * Create webhook request
+ */
+export interface NotchPayCreateWebhookRequest {
+  /**
+   * The URL where webhook events will be sent
+   */
+  url: string;
+
+  /**
+   * Array of event types to subscribe to
+   */
+  events: NotchPayWebhookEventType[] | string[];
+
+  /**
+   * Optional description of the webhook
+   */
+  description?: string;
+
+  /**
+   * Whether the webhook is active (default: true)
+   */
+  active?: boolean;
+}
+
+/**
+ * Update webhook request
+ */
+export interface NotchPayUpdateWebhookRequest {
+  /**
+   * The URL where webhook events will be sent
+   */
+  url?: string;
+
+  /**
+   * Array of event types to subscribe to
+   */
+  events?: NotchPayWebhookEventType[] | string[];
+
+  /**
+   * Description of the webhook
+   */
+  description?: string;
+
+  /**
+   * Whether the webhook is active
+   */
+  active?: boolean;
+}

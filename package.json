@@ -1,6 +1,6 @@
 {
   "name": "notchpay-client",
-  "version": "0.2.0-beta",
+  "version": "0.3.0-beta",
   "description": "The notchpay javascript client for your saas",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,8 @@
     }
   },
   "keywords": [
-    "Notchpay"
+    "Notchpay",
+    "Notchpay client"
   ],
   "repository": {
     "type": "git",

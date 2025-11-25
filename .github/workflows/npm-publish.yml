@@ -4,8 +4,11 @@
 name: Publish as Node.js Package
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
 
 permissions:
   contents: write
