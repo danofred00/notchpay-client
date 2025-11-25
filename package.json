@@ -16,7 +16,8 @@
     }
   },
   "keywords": [
-    "Notchpay"
+    "Notchpay",
+    "Notchpay client"
   ],
   "repository": {
     "type": "git",
