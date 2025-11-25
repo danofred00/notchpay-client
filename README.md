@@ -27,6 +27,7 @@ Available functionalities include:
 4. [Usage](#usage)
    - [Payment Operations](#payment-operations)
    - [Recipient Operations](#recipient-operations)
+   - [Webhook Operations](#webhook-operations)
 5. [Support](#support)
 6. [Debugging Errors](#debugging-errors)
 7. [License](#license)
@@ -193,6 +194,36 @@ const response = await notchpay.recipients.create(recipientData);
 const recipients = await notchpay.recipients.getAll();
 
 console.log(recipients.items); // Array of recipients
+```
+
+### Webhook operations
+```javascript
+
+// CREATE
+const webhook = await notchpay.webhooks.create({
+  url: 'https://example.com/webhooks',
+  events: [
+    NotchPayWebhookEventType.PAYMENT_COMPLETE,
+    NotchPayWebhookEventType.PAYMENT_FAILED
+  ],
+  description: 'Payment notifications for my e-commerce site',
+  active: true
+});
+
+// LIST
+const webhooks = await notchpay.webhooks.list(30, 1);
+
+// RETRIEVE
+const webhook = await notchpay.webhooks.retrieve('webhook_id');
+
+// UPDATE
+const updatedWebhook = await notchpay.webhooks.update('webhook_id', {
+  active: false,
+  events: [NotchPayWebhookEventType.PAYMENT_COMPLETE]
+});
+
+// DELETE
+await client.webhooks.delete('webhook_id');
 ```
 
 ## 5. Support
