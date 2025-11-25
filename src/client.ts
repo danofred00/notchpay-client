@@ -6,6 +6,7 @@ import {
   RefundUsecases,
   TransferUsecases,
   CustomerUsecases,
+  WebhookUsecase,
 } from "./usecases";
 
 export type NotchpayClientConstructorOptions = {
@@ -28,6 +29,7 @@ export class NotchpayClient {
   private _refunds: RefundUsecases;
   private _transfers: TransferUsecases;
   private _accounts: AccountUsecases;
+  private _webhooks: WebhookUsecase;
 
   constructor({
     publicKey,
@@ -60,6 +62,7 @@ export class NotchpayClient {
     this._customers = new CustomerUsecases(this.client);
     this._refunds = new RefundUsecases(this.client);
     this._transfers = new TransferUsecases(this.client, this.privateKey);
+    this._webhooks = new WebhookUsecase(this.client);
   }
 
   /**
@@ -102,6 +105,13 @@ export class NotchpayClient {
    */
   get accounts() {
     return this._accounts;
+  }
+
+  /**
+   * Manage webhooks
+   */
+  get webhooks() {
+    return this._webhooks;
   }
 
   ///////////// PRIVATE METHODS /////////////////////

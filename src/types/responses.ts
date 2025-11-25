@@ -316,3 +316,124 @@ export interface NotchPayInitializeTransferResponse
   extends NotchPayBaseResponse {
   transfer: NotchPayTransfer;
 }
+
+
+/**
+ * NotchPay Webhook Event
+ */
+export interface NotchPayWebhookEvent<TData = any> {
+  /**
+   * unique identifier for the webhook event
+   */
+  id: string;
+
+  /**
+   * Event type (eg: payment.complete, transer.failed)
+   */
+  type: string;
+
+  /**
+   * Timestamp when the event was created
+   */
+  created_at: string;
+
+  /**
+   * Event data payload (eg. a payment or transfer object)
+   */
+  data: TData;
+}
+
+/**
+ * NotchPay Webhook
+ */
+export interface NotchPayWebhook {
+  /**
+   * Unique identifier for the webhook
+   */
+  id: string;
+
+  /**
+   * The URL where webhook events will be sent
+   */
+  url: string;
+
+  /**
+   * Array of event types this webhook is subscribed to
+   */
+  events: string[];
+
+  /**
+   * Description of the webhook
+   */
+  description?: string;
+
+  /**
+   * Whether the webhook is active
+   */
+  active: boolean;
+
+  /**
+   * Secret used to sign webhook payloads
+   */
+  secret?: string;
+
+  /**
+   * Timestamp when the webhook was created
+   */
+  created_at: string;
+
+  /**
+   * Timestamp when the webhook was last updated
+   */
+  updated_at?: string;
+}
+
+/**
+ * Create webhook response
+ */
+export interface NotchPayCreateWebhookResponse extends NotchPayBaseResponse {
+  /**
+   * Webhook data
+   */
+  webhook: NotchPayWebhook;
+}
+
+/**
+ * Get webhook response
+ */
+export interface NotchPayGetWebhookResponse extends NotchPayBaseResponse {
+  /**
+   * Webhook data
+   */
+  webhook: NotchPayWebhook;
+}
+
+/**
+ * Update webhook response
+ */
+export interface NotchPayUpdateWebhookResponse extends NotchPayBaseResponse {
+  /**
+   * Updated webhook data
+   */
+  webhook: NotchPayWebhook;
+}
+
+/**
+ * Delete webhook response
+ */
+export interface NotchPayDeleteWebhookResponse extends NotchPayBaseResponse {
+  /**
+   * Confirmation message
+   */
+  message: string;
+}
+
+/**
+ * List webhooks response
+ */
+export interface NotchPayListWebhooksResponse extends NotchPayCollectionResponse<NotchPayWebhook> {
+  /**
+   * List of webhooks
+   */
+  items: NotchPayWebhook[];
+}
