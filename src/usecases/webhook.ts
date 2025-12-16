@@ -8,19 +8,26 @@ import {
   NotchPayDeleteWebhookResponse,
   NotchPayListWebhooksResponse,
 } from "../types";
+import { AxiosInstance } from "axios";
 
 export class WebhookUsecase extends Usecase {
+  #privateKey: string;
+
+  constructor(privateKey: string, client: AxiosInstance) {
+    super(client);
+    this.#privateKey = privateKey;
+  }
+
   /**
    * Create a new webhook endpoint
    * @param webhookData Webhook creation data
    * @returns Promise with webhook creation response
    */
-  public async create(
-    webhookData: NotchPayCreateWebhookRequest
-  ){
+  public async create(webhookData: NotchPayCreateWebhookRequest) {
     const response = await this.client.post<NotchPayCreateWebhookResponse>(
       "/webhooks",
-      webhookData
+      webhookData,
+      { headers: { "X-Grant": this.#privateKey } }
     );
     return response.data;
   }
@@ -72,10 +79,7 @@ export class WebhookUsecase extends Usecase {
    * @param page Page number (default: 1)
    * @returns Promise with list of webhooks
    */
-  public async list(
-    limit: number = 30,
-    page: number = 1
-  ) {
+  public async list(limit: number = 30, page: number = 1) {
     const response = await this.client.get<NotchPayListWebhooksResponse>(
       "/webhooks",
       {
@@ -83,6 +87,7 @@ export class WebhookUsecase extends Usecase {
           limit,
           page,
         },
+        headers: { "X-Grant": this.#privateKey },
       }
     );
     return response.data;
