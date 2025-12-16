@@ -20,7 +20,8 @@ describe("Recipient API integration test", () => {
       email: `user${Date.now()}@example.com`,
       name: "Test User",
       country: "CM",
-      account_number: "+237656019261",
+      account_number: "+237670000000",
+      phone: "+237670000000",
     };
     const response = await notchpay.recipients.create(recipientData);
 

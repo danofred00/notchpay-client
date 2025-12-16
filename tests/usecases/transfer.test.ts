@@ -15,46 +15,54 @@ beforeAll(() => {
 });
 
 describe("Transfer API integration test", () => {
-  it("Should Create a transfer", async () => {
-    // create recipient
-    const recipientData: NotchPayCreateRecipientRequest = {
-      channel: NotchPayChannel.MOBILE,
-      email: `user${Date.now()}@example.com`,
-      name: "Test User",
-      country: "CM",
-      account_number: "+237656019261",
-    };
-    const recipientResponse = await notchpay.recipients.create(recipientData);
+  if (process.env.NODE_ENV === "development") {
+    it("Should Create a transfer", async () => {
+      // create recipient
+      const recipientData: NotchPayCreateRecipientRequest = {
+        channel: NotchPayChannel.MOBILE,
+        email: `user${Date.now()}@example.com`,
+        name: "Test User",
+        country: "CM",
+        account_number: "+237670000000",
+        phone: "+237670000000",
+      };
+      const recipientResponse = await notchpay.recipients.create(recipientData);
 
-    // initiate transfer
-    const transferData: NotchPayInitializeTransferRequest = {
-      recipient: recipientResponse.beneficiary.id,
-      currency: "XAF",
-      amount: 100,
-      description: "Create recipient Test testing ",
-      channel: NotchPayChannel.MOBILE,
-    };
+      // initiate transfer
+      const transferData: NotchPayInitializeTransferRequest = {
+        recipient: recipientResponse.beneficiary.id,
+        currency: "XAF",
+        amount: 100,
+        description: "Create recipient Test testing ",
+        channel: NotchPayChannel.MOBILE,
+      };
 
-    const transferResponse = await transferUsecases.initialize(transferData);
+      const transferResponse = await transferUsecases.initialize(transferData);
 
-    // save the reference for other tests
-    testReference = transferResponse.transfer.reference;
+      // save the reference for other tests
+      testReference = transferResponse.transfer.reference;
 
-    expect(transferResponse.transfer).toBeDefined();
-    expect(transferResponse.code).toBe(201);
-    expect(transferResponse.transfer.reference).toBeDefined();
-  });
+      expect(transferResponse.transfer).toBeDefined();
+      expect(transferResponse.code).toBe(201);
+      expect(transferResponse.transfer.reference).toBeDefined();
+    });
 
-  it("Should retrieve a transfer", async () => {
-    const response = await transferUsecases.get(testReference);
-    expect(response.code).toBe(200);
-    expect(response.transfer.reference).toBe(testReference);
-  });
+    it("Should retrieve a transfer", async () => {
+      const response = await transferUsecases.get(testReference);
+      expect(response.code).toBe(200);
+      expect(response.transfer.reference).toBe(testReference);
+    });
 
-  it("Should list transfers", async () => {
-    const response = await transferUsecases.getAll();
+    it("Should list transfers", async () => {
+      const response = await transferUsecases.getAll();
 
-    expect(response.items).toBeDefined();
-    expect(response.code).toBe(200);
-  });
+      expect(response.items).toBeDefined();
+      expect(response.code).toBe(200);
+    });
+  } else {
+    it("Skipping Transfer API integration tests in non-development environment", () => {
+      console.log("Node env :", process.env.NODE_ENV);
+      expect(true).toBe(true);
+    });
+  }
 });

@@ -62,7 +62,7 @@ export class NotchpayClient {
     this._customers = new CustomerUsecases(this.client);
     this._refunds = new RefundUsecases(this.client);
     this._transfers = new TransferUsecases(this.client, this.privateKey);
-    this._webhooks = new WebhookUsecase(this.client);
+    this._webhooks = new WebhookUsecase(this.privateKey, this.client);
   }
 
   /**
@@ -144,7 +144,7 @@ export class NotchpayClient {
           console.error("NotchPay API Error:", {
             status: axiosError.response.status,
             statusText: axiosError.response.statusText,
-            data: axiosError.response.data,
+            data: JSON.stringify(axiosError.response.data, null, 2),
           });
         } else if (axiosError.request) {
           console.error(

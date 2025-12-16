@@ -355,7 +355,7 @@ export interface NotchPayWebhook {
   /**
    * The URL where webhook events will be sent
    */
-  url: string;
+  url: string | null;
 
   /**
    * Array of event types this webhook is subscribed to
@@ -373,9 +373,14 @@ export interface NotchPayWebhook {
   active: boolean;
 
   /**
-   * Secret used to sign webhook payloads
+   * Status of the webhook
    */
-  secret?: string;
+  status: string | null;
+
+  /**
+   * Indicates if webhook is in sandbox/test mode
+   */
+  sandbox: boolean;
 
   /**
    * Timestamp when the webhook was created
@@ -395,7 +400,7 @@ export interface NotchPayCreateWebhookResponse extends NotchPayBaseResponse {
   /**
    * Webhook data
    */
-  webhook: NotchPayWebhook;
+  endpoint: NotchPayWebhook;
 }
 
 /**
@@ -405,7 +410,7 @@ export interface NotchPayGetWebhookResponse extends NotchPayBaseResponse {
   /**
    * Webhook data
    */
-  webhook: NotchPayWebhook;
+  endpoint: NotchPayWebhook;
 }
 
 /**
@@ -435,5 +440,5 @@ export interface NotchPayListWebhooksResponse extends NotchPayCollectionResponse
   /**
    * List of webhooks
    */
-  items: NotchPayWebhook[];
+  endpoints: NotchPayWebhook[];
 }
