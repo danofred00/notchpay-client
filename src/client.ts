@@ -144,7 +144,7 @@ export class NotchpayClient {
           console.error("NotchPay API Error:", {
             status: axiosError.response.status,
             statusText: axiosError.response.statusText,
-            data: axiosError.response.data,
+            data: JSON.stringify(axiosError.response.data, null, 2),
           });
         } else if (axiosError.request) {
           console.error(
